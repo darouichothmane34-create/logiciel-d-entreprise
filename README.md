@@ -26,7 +26,11 @@ Application de niveau **débutant amélioré** pour apprendre les bases de .NET 
    ```
 3. Restaurer et exécuter:
    ```bash
+   dotnet --version
    dotnet restore
    dotnet build -f net8.0-windows10.0.19041.0
    dotnet run -f net8.0-windows10.0.19041.0
    ```
+
+
+> Astuce : si `dotnet --version` affiche `10.x`, placez-vous à la racine du projet (fichier `global.json`) pour forcer l'usage du SDK .NET 8.
