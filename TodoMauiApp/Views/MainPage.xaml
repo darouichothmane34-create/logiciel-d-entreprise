@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TodoMauiApp.Views.MainPage"
+             Title="To-Do List">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label Text="Mes tâches quotidiennes" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+            <Label Text="Ajoutez, cochez, filtrez et supprimez vos tâches simplement." TextColor="{StaticResource TextMuted}" />
+
+            <Frame BorderColor="#E6EBF5" Padding="14" CornerRadius="12" HasShadow="False">
+                <VerticalStackLayout Spacing="10">
+                    <Entry Placeholder="Titre de la tâche" Text="{Binding NewTitle}" ClearButtonVisibility="WhileEditing" />
+                    <Editor Placeholder="Description (facultative)" Text="{Binding NewDescription}" AutoSize="TextChanges" MaxLength="180" />
+                    <Button Text="Ajouter" Command="{Binding AddTaskCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <HorizontalStackLayout Spacing="8">
+                <Button Text="Toutes" Style="{StaticResource FilterButton}" Command="{Binding ApplyFilterCommand}" CommandParameter="Toutes" />
+                <Button Text="À faire" Style="{StaticResource FilterButton}" Command="{Binding ApplyFilterCommand}" CommandParameter="À faire" />
+                <Button Text="Terminées" Style="{StaticResource FilterButton}" Command="{Binding ApplyFilterCommand}" CommandParameter="Terminées" />
+            </HorizontalStackLayout>
+
+            <Label Text="{Binding RemainingCount, StringFormat='Tâches restantes : {0}'}" FontAttributes="Bold" />
+
+            <CollectionView ItemsSource="{Binding Tasks}" SelectionMode="None" HeightRequest="500">
+                <CollectionView.EmptyView>
+                    <Label Text="Aucune tâche pour le moment." HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource TextMuted}" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="12" Margin="0,0,0,10" BorderColor="#E6EBF5" CornerRadius="10" HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="2">
+                                <CheckBox Grid.RowSpan="2"
+                                          IsChecked="{Binding IsCompleted}"
+                                          Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ToggleTaskCommand}"
+                                          CommandParameter="{Binding .}" />
+
+                                <Label Grid.Column="1" Style="{StaticResource TaskTitleLabel}" Text="{Binding Title}" />
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource TextMuted}" />
+
+                                <Button Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        Text="Suppr."
+                                        BackgroundColor="{StaticResource Danger}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
